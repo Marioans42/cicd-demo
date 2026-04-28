@@ -3,23 +3,32 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto21
+      java: corretto17
     commands:
-      - echo "Installation OK — Java $(java -version 2>&1 | head -n 1)"
+      - echo "===== INSTALL ====="
+      - java -version
+      - mvn -version
   pre_build:
     commands:
-      - echo "Pre-build phase"
-      - mvn --version
+      - echo "===== PRE-BUILD ====="
+      - echo "Working dir: $(pwd)"
+      - ls -la
+      - test -f pom.xml && echo "pom.xml OK" || (echo "pom.xml missing" && exit 1)
   build:
     commands:
+      - echo "===== BUILD ====="
       - echo "Build started on $(date)"
       - mvn clean package -DskipTests
       - echo "Build finished on $(date)"
   post_build:
     commands:
-      - echo "Renaming jar for deployment"
-      - mv target/simple-spring-app-1.0-SNAPSHOT.jar target/app.jar
+      - echo "===== POST-BUILD ====="
       - ls -la target/
+      # Wildcard : prend n'importe quel .jar (sauf les *-original.jar de Spring Boot)
+      - JAR=$(ls target/*.jar | grep -v original | head -1)
+      - echo "JAR trouvé : $JAR"
+      - cp "$JAR" target/app.jar
+      - ls -la target/app.jar
 
 artifacts:
   files:
@@ -27,7 +36,3 @@ artifacts:
     - appspec.yml
     - scripts/**/*
   discard-paths: no
-
-cache:
-  paths:
-    - '/root/.m2/**/*'
