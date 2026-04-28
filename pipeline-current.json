@@ -1,0 +1,95 @@
+{
+    "pipeline": {
+        "name": "cicd-demo-pipeline",
+        "roleArn": "arn:aws:iam::463766459869:role/cicd-demo-pipeline-role",
+        "artifactStore": {
+            "type": "S3",
+            "location": "mario-saa-lab1-2026"
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "provider": "CodeStarSourceConnection",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "BranchName": "main",
+                            "ConnectionArn": "arn:aws:codeconnections:eu-west-3:463766459869:connection/92f87d00-4dc0-4acd-b469-afd512ed4477",
+                            "FullRepositoryId": "Marioans42/cicd-demo",
+                            "DetectChanges": "true"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "inputArtifacts": []
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": "cicd-demo-build"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Deploy",
+                "actions": [
+                    {
+                        "name": "Deploy",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "provider": "CodeDeploy",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ApplicationName": "cicd-demo-app",
+                            "DeploymentGroupName": "cicd-demo-dg"
+                        },
+                        "outputArtifacts": [],
+                        "inputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "version": 1,
+        "executionMode": "SUPERSEDED",
+        "pipelineType": "V2"
+    }
+}

@@ -18,7 +18,7 @@ phases:
   post_build:
     commands:
       - echo "Renaming jar for deployment"
-      - mv target/simple-spring-app-*.jar target/app.jar
+      - mv target/simple-spring-app-1.0-SNAPSHOT.jar target/app.jar
       - ls -la target/
 
 artifacts:
