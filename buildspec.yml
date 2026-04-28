@@ -5,28 +5,27 @@ phases:
     runtime-versions:
       java: corretto17
     commands:
-      - echo "===== INSTALL ====="
+      - echo "Phase install"
       - java -version
       - mvn -version
   pre_build:
     commands:
-      - echo "===== PRE-BUILD ====="
-      - echo "Working dir: $(pwd)"
+      - echo "Phase pre-build"
+      - pwd
       - ls -la
-      - test -f pom.xml && echo "pom.xml OK" || (echo "pom.xml missing" && exit 1)
+      - test -f pom.xml && echo "pom.xml present" || exit 1
   build:
     commands:
-      - echo "===== BUILD ====="
-      - echo "Build started on $(date)"
+      - echo "Phase build"
+      - date
       - mvn clean package -DskipTests
-      - echo "Build finished on $(date)"
+      - date
   post_build:
     commands:
-      - echo "===== POST-BUILD ====="
+      - echo "Phase post-build"
       - ls -la target/
-      # Wildcard : prend n'importe quel .jar (sauf les *-original.jar de Spring Boot)
       - JAR=$(ls target/*.jar | grep -v original | head -1)
-      - echo "JAR trouvé : $JAR"
+      - echo "Jar found $JAR"
       - cp "$JAR" target/app.jar
       - ls -la target/app.jar
 
