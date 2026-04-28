@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: target/app.jar
+  - source: app.jar
     destination: /opt/app
     overwrite: true
   - source: scripts/start.sh

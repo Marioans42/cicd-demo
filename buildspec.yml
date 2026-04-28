@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17
+      java: corretto21
     commands:
       - echo "Phase install"
       - java -version
@@ -13,25 +13,27 @@ phases:
       - echo "Phase pre-build"
       - pwd
       - ls -la
-      - test -f pom.xml && echo "pom.xml present" || exit 1
+      - cd simple-spring-app && ls -la
+      - test -f simple-spring-app/pom.xml && echo "pom.xml found" || exit 1
   build:
     commands:
       - echo "Phase build"
-      - date
+      - cd simple-spring-app
       - mvn clean package -DskipTests
-      - date
   post_build:
     commands:
       - echo "Phase post-build"
+      - cd simple-spring-app
       - ls -la target/
       - JAR=$(ls target/*.jar | grep -v original | head -1)
       - echo "Jar found $JAR"
-      - cp "$JAR" target/app.jar
-      - ls -la target/app.jar
+      - cp "$JAR" ../app.jar
+      - cd ..
+      - ls -la app.jar
 
 artifacts:
   files:
-    - target/app.jar
+    - app.jar
     - appspec.yml
     - scripts/**/*
   discard-paths: no
