@@ -1,0 +1,3 @@
+com\aws\ec2\App.class
+com\aws\ec2\Application.class
+com\aws\ec2\controller\HealthController.class

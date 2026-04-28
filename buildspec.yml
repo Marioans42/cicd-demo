@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+    commands:
+      - echo "Installation OK — Java $(java -version 2>&1 | head -n 1)"
+  pre_build:
+    commands:
+      - echo "Pre-build phase"
+      - mvn --version
+  build:
+    commands:
+      - echo "Build started on $(date)"
+      - mvn clean package -DskipTests
+      - echo "Build finished on $(date)"
+  post_build:
+    commands:
+      - echo "Renaming jar for deployment"
+      - mv target/cicd-demo-*.jar target/app.jar
+      - ls -la target/
+
+artifacts:
+  files:
+    - target/app.jar
+    - appspec.yml
+    - scripts/**/*
+  discard-paths: no
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
