@@ -18,7 +18,7 @@ phases:
   post_build:
     commands:
       - echo "Renaming jar for deployment"
-      - mv target/cicd-demo-*.jar target/app.jar
+      - mv target/simple-spring-app-*.jar target/app.jar
       - ls -la target/
 
 artifacts:

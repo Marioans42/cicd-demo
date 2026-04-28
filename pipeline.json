@@ -1,10 +1,10 @@
 {
   "pipeline": {
     "name": "cicd-demo-pipeline",
-    "roleArn": "arn:aws:iam::${ACCOUNT_ID}:role/cicd-demo-pipeline-role",
+    "roleArn": "arn:aws:iam::463766459869:role/cicd-demo-pipeline-role",
     "artifactStore": {
       "type": "S3",
-      "location": "${BUCKET_NAME}"
+      "location": "mario-saa-lab1-2026"
     },
     "stages": [
       {
@@ -18,8 +18,8 @@
             "version": "1"
           },
           "configuration": {
-            "ConnectionArn": "${GITHUB_CONNECTION_ARN}",
-            "FullRepositoryId": "${GITHUB_OWNER}/${GITHUB_REPO}",
+            "ConnectionArn": "arn:aws:codeconnections:eu-west-3:463766459869:connection/92f87d00-4dc0-4acd-b469-afd512ed4477",
+            "FullRepositoryId": "Marioans42/cicd-demo",
             "BranchName": "main"
           },
           "outputArtifacts": [{"name": "SourceArtifact"}]

@@ -1,10 +1,61 @@
 {
   "Version": "2012-10-17",
   "Statement": [
-    {"Effect": "Allow", "Action": "s3:*", "Resource": ["arn:aws:s3:::cicd-demo-artifacts-${ACCOUNT_ID}", "arn:aws:s3:::cicd-demo-artifacts-${ACCOUNT_ID}/*"]},
-    {"Effect": "Allow", "Action": ["codebuild:BatchGetBuilds", "codebuild:StartBuild"], "Resource": "*"},
-    {"Effect": "Allow", "Action": ["codedeploy:*"], "Resource": "*"},
-    {"Effect": "Allow", "Action": ["codestar-connections:UseConnection"], "Resource": "*"},
-    {"Effect": "Allow", "Action": ["iam:PassRole"], "Resource": "*"}
+    {
+      "Sid": "S3Artifacts",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:GetBucketVersioning",
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": [
+        "arn:aws:s3:::mario-saa-lab1-2026",
+        "arn:aws:s3:::mario-saa-lab1-2026/*"
+      ]
+    },
+    {
+      "Sid": "CodeBuild",
+      "Effect": "Allow",
+      "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild",
+        "codebuild:BatchGetBuildBatches",
+        "codebuild:StartBuildBatch"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CodeDeploy",
+      "Effect": "Allow",
+      "Action": [
+        "codedeploy:CreateDeployment",
+        "codedeploy:GetApplication",
+        "codedeploy:GetApplicationRevision",
+        "codedeploy:GetDeployment",
+        "codedeploy:GetDeploymentConfig",
+        "codedeploy:RegisterApplicationRevision"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CodeConnections",
+      "Effect": "Allow",
+      "Action": [
+        "codestar-connections:UseConnection",
+        "codeconnections:UseConnection"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "PassRole",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "*"
+    }
   ]
 }

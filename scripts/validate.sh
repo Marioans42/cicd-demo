@@ -2,7 +2,7 @@
 set -e
 echo "[validate] Validation du service"
 for i in {1..12}; do
-  if curl -fs http://localhost:8080/actuator/health | grep -q '"status":"UP"'; then
+  if curl -fs http://localhost:8080/health | grep -q '"status":"UP"'; then
     echo "[validate] Service UP"
     exit 0
   fi
