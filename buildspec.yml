@@ -11,24 +11,30 @@ phases:
   pre_build:
     commands:
       - echo "Phase pre-build"
-      - pwd
+      - echo "Working dir is $(pwd)"
       - ls -la
-      - cd simple-spring-app && ls -la
-      - test -f simple-spring-app/pom.xml && echo "pom.xml found" || exit 1
+      - echo "Searching pom.xml"
+      - find . -name "pom.xml" -not -path "*/node_modules/*" -not -path "*/target/*"
+      - POM_PATH=$(find . -name "pom.xml" -not -path "*/node_modules/*" -not -path "*/target/*" | head -1)
+      - echo "Found at $POM_PATH"
+      - test -n "$POM_PATH" || (echo "No pom.xml" && exit 1)
   build:
     commands:
       - echo "Phase build"
-      - cd simple-spring-app
+      - POM_PATH=$(find . -name "pom.xml" -not -path "*/node_modules/*" -not -path "*/target/*" | head -1)
+      - POM_DIR=$(dirname "$POM_PATH")
+      - cd "$POM_DIR"
+      - pwd
       - mvn clean package -DskipTests
   post_build:
     commands:
       - echo "Phase post-build"
-      - cd simple-spring-app
-      - ls -la target/
-      - JAR=$(ls target/*.jar | grep -v original | head -1)
+      - POM_PATH=$(find . -name "pom.xml" -not -path "*/node_modules/*" -not -path "*/target/*" | head -1)
+      - POM_DIR=$(dirname "$POM_PATH")
+      - ls -la "$POM_DIR/target/"
+      - JAR=$(ls "$POM_DIR"/target/*.jar | grep -v original | head -1)
       - echo "Jar found $JAR"
-      - cp "$JAR" ../app.jar
-      - cd ..
+      - cp "$JAR" app.jar
       - ls -la app.jar
 
 artifacts:
